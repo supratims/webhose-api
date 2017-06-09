@@ -9,7 +9,7 @@ const options = {
 };
 
 function urlBuilder(url, params){
-	return url+'?token='+options.key+'&'+querystring.stringify(params);
+	return url+'?token='+options.key+'&format=json&'+querystring.stringify(params);
 }
 const base_url = 'https://webhose.io/productFilter';
 const product_url = urlBuilder(base_url, {q: 'name:iphone 6s'});
@@ -19,14 +19,18 @@ fetch(product_url);
 
 function fetch(url, callback){
     https.get(url, (res) => {
-      res.on('data', (d) => {
-        var json = JSON.parse(d.toString());
+      var body = '';
+      res.on('end', () => {        
+        var json = JSON.parse(body.toString());
 	var products = json.products;
 	products.forEach(function(prod){		
-	    console.log(prod.price);
+	    console.log(prod);
 	});
+      })
+      .on('data', (chunk) => {
+	console.log('Receiving ...');
+        body += chunk;
       });
-    
     }).on('error', (e) => {
       console.error(e);
     });
