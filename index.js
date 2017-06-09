@@ -4,10 +4,6 @@
 const https = require('https');
 const fs = require('fs');
 const querystring = require('querystring');
-
-/*
- * Make sure you have a api_key file with the key from guardian 
- */
 const options = {
   key: fs.readFileSync('./api_key').toString().trim(),
 };
